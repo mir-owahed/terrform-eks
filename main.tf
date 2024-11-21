@@ -60,19 +60,14 @@ resource "aws_subnet" "subnet_3" {
 
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "20.29.0"
+  version = "~> 20.0"
 
-  cluster_name    = "eks-cluster"
-  cluster_version = "1.31"
+  cluster_name    = "my-cluster-eks"
+  cluster_version = "1.28"
 
-  cluster_endpoint_public_access  = true
+  cluster_endpoint_public_access = true
 
-  cluster_addons = {
-    coredns                = {}
-    eks-pod-identity-agent = {}
-    kube-proxy             = {}
-    vpc-cni                = {}
-  }
+
 
   vpc_id                   = aws_vpc.main.id
   subnet_ids               = [aws_subnet.subnet_1.id, aws_subnet.subnet_2.id, aws_subnet.subnet_3.id]
@@ -83,11 +78,9 @@ module "eks" {
       min_size       = 1
       max_size       = 1
       desired_size   = 1
-      ami_type       = "AL2023_x86_64_STANDARD"
       instance_types = ["t3.medium"]
     }
   }
 }
 
 
-  
